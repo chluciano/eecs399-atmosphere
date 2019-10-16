@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Hello World</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous"/>
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='index.css') }}"/>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+<body>
+	<meta id="spotify_uri" data-name="{{spotify_uri}}" data-other="{{spotify_uri}}">
+	<div class="container-fluid" id="playerContainer">
+		<div class="atmosphereContainer">
+		<h1 id="title"> Atmosphere </h1>
+		<div class="buttonContainer">
+			<button> << </button>
+			<button onclick="playPlayer()"> Play </button>
+			<button onclick="pausePlayer()"> Pause </button>
+			<button> >> </button>
+		</div>
+		</div>
+	</div>
+</body>
+<script>
+	const endpoint = 'http://localhost:5000/audio';
+	var access_token = '{{ access_token }}';
+	var refresh_token = '{{ refresh_token }}';
+	var current_State = '';
+
+	function analyzeAtmosphere(){
+		$.post(
+			endpoint,
+			{
+				'refresh_token': refresh_token,
+				'current_state': current_State
+
+			},
+			function(data){
+				console.log(data)
+				access_token = data.access_token
+				refresh_token = data.refresh_token
+				if (data.current_state != ''){
+					current_state = data.current_state
+				}
+				
+
+			}
+		).fail(function(){
+			console.log('error')
+		});
+	}
+
+	analyzeAtmosphere();
+	setInterval(analyzeAtmosphere, 40000)
+	
+	function pausePlayer(){
+		const url = "http://localhost:5000/pause"
+		$.post(
+			url,
+			function(data){
+				console.log(data)
+			}
+		)
+	}
+
+
+ </script>
+</html>
