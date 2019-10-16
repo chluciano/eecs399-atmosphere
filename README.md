@@ -1,4 +1,4 @@
-If you have 2 versions of python installed you might have to do this
+# If you have 2 versions of python on your computer....
 
 ~~~
 python3 -m venv env
@@ -16,7 +16,7 @@ python3 spotify.py
 
 
 
-Otherwise just do this
+# Otherwise just do this
 ~~~
 python -m venv env
 source env/bin/activate
