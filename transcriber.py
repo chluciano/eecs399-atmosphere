@@ -1,6 +1,7 @@
 from __future__ import print_function
 import json
 from os.path import join, dirname
+from collections import defaultdict
 from ibm_watson import SpeechToTextV1, NaturalLanguageUnderstandingV1
 from ibm_watson.natural_language_understanding_v1 import Features, EntitiesOptions, KeywordsOptions
 from ibm_watson.websocket import RecognizeCallback, AudioSource
@@ -79,26 +80,37 @@ def sentiment_analysis(transcript):
             keywords=KeywordsOptions(emotion=True, sentiment=True,
                                      limit=2))).get_result()
     print("Analyzed sentiment...")
+    print(response)
     return handle_sentiment(response)
 
 def handle_sentiment(sentiment):
-    relevance = 0
-    top_emotion = ""
+    keywords = [];
+    emotions = ["sadness", "joy", "fear", "disgust", "anger"]
+    emotion_weights = defaultdict(int)
 
     for keyword in sentiment["keywords"]:
-        if keyword["relevance"] > relevance:
-            relevance = keyword["relevance"]
-            top_emotion = find_top_emotion(keyword["emotion"])
-    return top_emotion
+        keywords.append(keyword["text"])
+        relevance = keyword["relevance"]
+        for emotion in emotions:
+            emotion_weights[emotion] += relevance * keyword["emotion"][emotion]
+  
+    return find_emotion(emotion_weights)
+    
+def find_emotion(emotion_weights):
+    total_weight = 0
 
-def find_top_emotion(emotions):
-    max_val = 0
-    top_emo = ""
-    for e, val in emotions.items():
-        if val > max_val:
-            max_val = val
-            top_emo = e
-    return top_emo
+    for k,v in emotion_weights.items():
+        total_weight += v
+    for k,v in emotion_weights.items():
+        emotion_weights[k] = v/total_weight
+
+    # logic about picking emotion based on gracenote mood list
+
+    emotions = sorted(emotion_weights.items(), key=lambda x: x[1], reverse=True)    
+    print(emotions)
+
+    # placeholder
+    return "sadness"
 
 def main():
     transcript = transcribe()
