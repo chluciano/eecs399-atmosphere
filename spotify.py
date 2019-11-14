@@ -22,14 +22,6 @@ angryPlaylistId = "5CnhvCg1AcjuKH97lf1uam"
 scope = "user-read-private user-read-email user-read-playback-state user-modify-playback-state streaming user-read-birthdate" 
 
 
-FORMAT = pyaudio.paInt16
-CHANNELS = 2
-RATE = 44100
-CHUNK = 1024
-RECORD_SECONDS = 15
-WAVE_OUTPUT_FILENAME = "test.wav"
-
-
 @app.route("/")
 def auth():
 	return redirect('https://accounts.spotify.com/authorize' +
