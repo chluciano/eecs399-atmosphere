@@ -172,7 +172,7 @@ def transcribe_and_analyze():
 
 	# default to text-to-sentiment analysis
 	else:
-		compare_sentiment_analyses(text_to_sentiment_emotion, speech_to_sentiment_emotion)
+		user_state = compare_sentiment_analyses(text_to_sentiment_emotion, speech_to_sentiment_emotion)
 	
 	return (user_state, text_to_sentiment_analysis, speech_to_sentiment_analysis)
 
@@ -187,7 +187,7 @@ def compare_sentiment_analyses(tts_emotion, sts_emotion):
 		tts_confidence = tts_emotion[1]
 		sts_confidence = sts_emotion[1]
 		# more logic
-		return sts_emotion
+		return sts_emotion[0]
 
 
 if __name__ == '__main__':
