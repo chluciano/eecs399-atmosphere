@@ -2,7 +2,7 @@
 
 ~~~
 source env/bin/activate
-pip3 install ibm_watson ibm_cloud_sdk_core Flask pyaudio wave 
+pip3 install ibm_watson ibm_cloud_sdk_core Flask pyaudio wave scipy
 python3 spotify.py
 ~~~
 Anytime you want to run the program:
@@ -18,7 +18,7 @@ python3 spotify.py
 # Otherwise just do this
 ~~~
 source env/bin/activate
-pip install ibm_watson ibm_cloud_sdk_core Flask pyaudio wave 
+pip install ibm_watson ibm_cloud_sdk_core Flask pyaudio wave scipy
 python spotify.py
 ~~~
 Anytime you want to run the program:
