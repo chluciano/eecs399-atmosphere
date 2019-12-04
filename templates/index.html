@@ -9,6 +9,20 @@
 <body>
 	<meta id="spotify_uri" data-name="{{spotify_uri}}" data-other="{{spotify_uri}}">
 	<div class="container-fluid" id="playerContainer">
+		<table class="table table-striped" id="emotion_table">
+			<thead>
+				<tr>
+					<th scope="col"> Text-to-Sentiment Values </th>
+					<th scope="col"> Speech-to-Sentiment Values </th>
+					<th scope="col"> Chosen Emotion </th>
+				</tr>
+			</thead>
+			<tbody id="table-body">
+			</tbody>
+		</table>
+		
+		<!--
+			<div id="stateContainer"> </div>
 		<div class="atmosphereContainer">
 		<h1 id="title"> Atmosphere </h1>
 		<div class="buttonContainer">
@@ -18,6 +32,7 @@
 			<button> >> </button>
 		</div>
 		</div>
+		-->
 	</div>
 </body>
 <script>
@@ -25,6 +40,15 @@
 	var access_token = '{{ access_token }}';
 	var refresh_token = '{{ refresh_token }}';
 	var current_State = '';
+
+	function displayJson(json){
+		html = ''
+		for (let i = 0; i < json.length; i++){
+			html += json[i];
+			html+= '<br>'
+		}
+		return html;
+	}
 
 	function analyzeAtmosphere(){
 		$.post(
@@ -39,7 +63,16 @@
 				access_token = data.access_token
 				refresh_token = data.refresh_token
 				if (data.current_state != ''){
-					current_state = data.current_state
+					current_state = data.current_state;
+					text_to_sentiment_emotion = data.text_to_sentiment_emotion;
+					speech_to_sentiment_emotion = data.speech_to_sentiment_emotion;
+
+					tts_emotion_html = displayJson(text_to_sentiment_emotion);
+					sts_emotion_html = displayJson(speech_to_sentiment_emotion);
+
+					html = '<tr><td>' + tts_emotion_html + '</td><td>' + sts_emotion_html + '</td><td>' + current_state + '</td></tr>'
+					$('#emotion_table').append(html)
+
 				}
 				
 

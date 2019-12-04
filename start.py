@@ -9,6 +9,7 @@ from transcription.recording import record_audio
 from transcription.speech_to_text import transcribe
 from sentiment.analyze_text import analyze_sentiment as analyze_text
 from sentiment.analyze_speech import analyze_sentiment as analyze_speech
+from operator import itemgetter
 
 app = Flask(__name__)
 
@@ -45,7 +46,7 @@ def start():
 @app.route("/audio", methods=['POST'])
 def audio():
 	if request.method == 'POST':
-		user_state = transcribe_and_analyze()
+		(user_state, text_to_sentiment_emotion, speech_to_sentiment_emotion) = transcribe_and_analyze()
 		current_state = request.values.get('current_state');
 		refresh_token = request.values.get('refresh_token')
 		access_token = fetch_tokens_with_refresh(refresh_token);
@@ -55,7 +56,13 @@ def audio():
 			uris = []
 			for x in playlist["items"]: uris.append(x["track"]["uri"])
 			play_player("Bearer " + access_token, scope, uris)
-		return jsonify({'access_token': access_token, 'refresh_token': refresh_token, 'current_state': current_state})
+		return jsonify({
+			'access_token': access_token, 
+			'refresh_token': refresh_token, 
+			'current_state': current_state,
+			'text_to_sentiment_emotion': text_to_sentiment_emotion,
+			'speech_to_sentiment_emotion': speech_to_sentiment_emotion
+			})
 
 def fetch_tokens_with_auth(auth_code):
 	payload = base64.b64encode(bytes(client_id + ":" + client_secret, 'utf-8')).decode("ascii")
@@ -85,11 +92,11 @@ def fetch_tokens_with_refresh(refresh_token):
 	return r['access_token']
 
 def fetch_playlist_tracks(token, scope, user_state=None):
-	if user_state == "joy":
+	if user_state == "joy" or user_state == "happy":
 		playlistID = happyPlaylistId
-	elif user_state == "sadness":
+	elif user_state == "sadness" or user_state == "sad":
 		playlistID = sadPlaylistId
-	elif user_state == "anger":
+	elif user_state == "anger" or user_state == "angry":
 		playlistID = angryPlaylistId
 	elif user_state == "fear":
 		playlistID = sadPlaylistId
@@ -151,19 +158,37 @@ def transcribe_and_analyze():
 	user_state = None
 	recorded_audio = record_audio()
 	transcription = transcribe()
-	text_to_sentiment_state = analyze_text(transcription)
-	speech_to_sentiment_state = analyze_speech()
+
+	text_to_sentiment_analysis = analyze_text(transcription)
+	text_to_sentiment_emotion = max(text_to_sentiment_analysis, key=itemgetter(1))
+
+	speech_to_sentiment_analysis = analyze_speech()
+	speech_to_sentiment_emotion = max(speech_to_sentiment_analysis, key=itemgetter(1))
 	# logic to associate text-to-sentiment and speech-to-sentiment values
-	if (text_to_sentiment_state[0] == 'disgust' and speech_to_sentiment_state[0] != 'neutral'):
-		user_state = speech_to_sentiment_state
-	elif (speech_to_sentiment_state[0] == 'disgust'):
+	if (text_to_sentiment_emotion[0] == 'disgust' and speech_to_sentiment_emotion[0] != 'neutral'):
+		user_state = speech_to_sentiment_emotion[0]
+	elif (speech_to_sentiment_emotion[0] == 'disgust'):
 		user_state = 'anger'
-		
+
 	# default to text-to-sentiment analysis
 	else:
-		user_state = text_to_sentiment_state
+		compare_sentiment_analyses(text_to_sentiment_emotion, speech_to_sentiment_emotion)
 	
-	return user_state
+	return (user_state, text_to_sentiment_analysis, speech_to_sentiment_analysis)
+
+def compare_sentiment_analyses(tts_emotion, sts_emotion):
+	if (tts_emotion[0] == sts_emotion[0]):
+		return tts_emotion[0]
+	elif (tts_emotion[0] == 'joy' and sts_emotion != 'happy') or (sts_emotion[0] == 'happy' and tts_emotion[0] != 'joy'):
+		# handle irony
+		return sts_emotion[0]
+	else:
+		uniq_combo = 6
+		tts_confidence = tts_emotion[1]
+		sts_confidence = sts_emotion[1]
+		# more logic
+		return sts_emotion
+
 
 if __name__ == '__main__':
 	app.run(debug=True)

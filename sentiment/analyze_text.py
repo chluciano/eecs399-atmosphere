@@ -37,7 +37,7 @@ def handle_sentiment(sentiment):
   
     return emotion_weights
     
-def find_emotion(emotion_weights):
+def find_emotions(emotion_weights):
     total_weight = 0
 
     for k,v in emotion_weights.items():
@@ -48,17 +48,15 @@ def find_emotion(emotion_weights):
     # logic about picking emotion based on gracenote mood list
 
     emotions = sorted(emotion_weights.items(), key=lambda x: x[1], reverse=True)    
-    emotion = max(emotions, key=itemgetter(1))
-    print(emotions)
-    print("@@@")
-    print(emotion)
 
     # placeholder
-    return "sadness"
+    return emotions
 
 def analyze_sentiment(transcript):
     analyzed_sentiment_results = sentiment_analysis(transcript)
     emotion_weights = handle_sentiment(analyzed_sentiment_results)
-    emotion = find_emotion(emotion_weights)
-    return emotion
+    emotions = find_emotions(emotion_weights)
+    print('EmotionProbabilities TEXT-TO-SENTIMENT')
+    print(emotions)
+    return emotions
 

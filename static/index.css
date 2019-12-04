@@ -1,7 +1,7 @@
-body{
+/* body{
 	background-image: url('https://images.unsplash.com/photo-1469365556835-3da3db4c253b?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2250&q=80');
 	opacity:  .8;
-}
+} */
 
 #playerContainer{
 	display:  flex;

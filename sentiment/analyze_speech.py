@@ -21,6 +21,7 @@ import sys
 import scipy.io.wavfile
 from . import Vokaturi
 import os
+from operator import itemgetter
 
 if sys.platform == "linux":
     platform = "linux"
@@ -54,25 +55,26 @@ def analyze_sentiment():
 	emotion = "None"
 
 	if quality.valid:
-		emotion_probabilities_dict = {
-			'neutral': emotionProbabilities.neutrality,
-			'happy': emotionProbabilities.happiness,
-			'sad': emotionProbabilities.sadness,
-			'angry': emotionProbabilities.anger,
-			'fear': emotionProbabilities.fear
-		}
-		print("Neutral: %.3f" % emotionProbabilities.neutrality)
-		print("Happy: %.3f" % emotionProbabilities.happiness)
-		print("Sad: %.3f" % emotionProbabilities.sadness)
-		print("Angry: %.3f" % emotionProbabilities.anger)
-		print("Fear: %.3f" % emotionProbabilities.fear)
-		emotion = max(emotion_probabilities_dict, key=emotion_probabilities_dict.get)
+		emotion_probabilities_list = [
+			('neutral', emotionProbabilities.neutrality),
+			('happy', emotionProbabilities.happiness),
+			('sad', emotionProbabilities.sadness),
+			('angry', emotionProbabilities.anger),
+			('fear', emotionProbabilities.fear)
+		]
+		# print("Neutral: %.3f" % emotionProbabilities.neutrality)
+		# print("Happy: %.3f" % emotionProbabilities.happiness)
+		# print("Sad: %.3f" % emotionProbabilities.sadness)
+		# print("Angry: %.3f" % emotionProbabilities.anger)
+		# print("Fear: %.3f" % emotionProbabilities.fear)
 	else:
 		print("Not enough sonorancy to determine emotions")
 
 	voice.destroy()
 
-	return (emotion, emotion_probabilities_dict[emotion])
+	print("EmotionProbabilities SPEECH-TO-SENTIMENT")
+	print(emotion_probabilities_list)
+	return emotion_probabilities_list
 
 if __name__ == "__main__":
 	analyze_sentiment()
