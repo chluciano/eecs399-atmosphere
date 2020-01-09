@@ -46,7 +46,7 @@ def start():
 @app.route("/audio", methods=['POST'])
 def audio():
 	if request.method == 'POST':
-		(user_state, text_to_sentiment_emotion, speech_to_sentiment_emotion) = transcribe_and_analyze()
+		(user_state, text_to_sentiment_emotion, speech_to_sentiment_emotion, transcription) = transcribe_and_analyze()
 		current_state = request.values.get('current_state');
 		refresh_token = request.values.get('refresh_token')
 		access_token = fetch_tokens_with_refresh(refresh_token);
@@ -61,7 +61,8 @@ def audio():
 			'refresh_token': refresh_token, 
 			'current_state': current_state,
 			'text_to_sentiment_emotion': text_to_sentiment_emotion,
-			'speech_to_sentiment_emotion': speech_to_sentiment_emotion
+			'speech_to_sentiment_emotion': speech_to_sentiment_emotion,
+			'transcription': transcription
 			})
 
 def fetch_tokens_with_auth(auth_code):
@@ -169,12 +170,14 @@ def transcribe_and_analyze():
 		user_state = speech_to_sentiment_emotion[0]
 	elif (speech_to_sentiment_emotion[0] == 'disgust'):
 		user_state = 'anger'
+	elif (speech_to_sentiment_emotion[0] == 'neutral'):
+		user_state = text_to_sentiment_emotion[0]
 
 	# default to text-to-sentiment analysis
 	else:
 		user_state = compare_sentiment_analyses(text_to_sentiment_emotion, speech_to_sentiment_emotion)
 	
-	return (user_state, text_to_sentiment_analysis, speech_to_sentiment_analysis)
+	return (user_state, text_to_sentiment_analysis, speech_to_sentiment_analysis, transcription)
 
 def compare_sentiment_analyses(tts_emotion, sts_emotion):
 	if (tts_emotion[0] == sts_emotion[0]):

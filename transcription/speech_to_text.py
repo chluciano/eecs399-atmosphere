@@ -7,20 +7,30 @@ import json
 
 speech_to_text_authenticator = IAMAuthenticator('Ie8T4DP8IqRzCSz3Ww8B1padPbY5sbrx_BvQu_IeeMFo')
 
+FILE_NAME = "SENTIMENT.wav"
+
 def transcribe():
     print("Transcribing...")
     service = SpeechToTextV1(authenticator=speech_to_text_authenticator)
     model = service.get_model('en-US_NarrowbandModel').get_result()
 
-    with open('SENTIMENT.wav','rb') as audio_file:
-        transcript = json.dumps(
-            service.recognize(
+    with open(FILE_NAME,'rb') as audio_file:
+        api_result = service.recognize(
                 audio=audio_file,
-                content_type='audio/wav').get_result(),
-            indent=2)
+                content_type='audio/wav').get_result()
 
     print("Finished transcribing...")
+    transcript = concatenate_transcription(api_result)
     return transcript
+
+def concatenate_transcription(api_result):
+    final_transcript = ''
+    print(api_result)
+    results = api_result['results']
+    for result in results:
+        final_transcript += result['alternatives'][0]['transcript']
+
+    return final_transcript
 
 if __name__ == "__main__":
     transcribe()

@@ -12,6 +12,7 @@
 		<table class="table table-striped" id="emotion_table">
 			<thead>
 				<tr>
+					<th scope="col"> Transcription </th>
 					<th scope="col"> Text-to-Sentiment Values </th>
 					<th scope="col"> Speech-to-Sentiment Values </th>
 					<th scope="col"> Chosen Emotion </th>
@@ -44,8 +45,16 @@
 	function displayJson(json){
 		html = ''
 		for (let i = 0; i < json.length; i++){
-			html += json[i];
-			html+= '<br>'
+			if (i == 0){
+				html += '<span style="color: red">';
+				html+= json[i];
+				html += '</span>'
+				html+='<br>'
+			}
+			else{
+				html += json[i];
+				html+= '<br>'
+			}
 		}
 		return html;
 	}
@@ -66,11 +75,12 @@
 					current_state = data.current_state;
 					text_to_sentiment_emotion = data.text_to_sentiment_emotion;
 					speech_to_sentiment_emotion = data.speech_to_sentiment_emotion;
+					transcription = data.transcription;
 
 					tts_emotion_html = displayJson(text_to_sentiment_emotion);
 					sts_emotion_html = displayJson(speech_to_sentiment_emotion);
 
-					html = '<tr><td>' + tts_emotion_html + '</td><td>' + sts_emotion_html + '</td><td>' + current_state + '</td></tr>'
+					html = '<tr><td>' + transcription + '</td><td>' + tts_emotion_html + '</td><td>' + sts_emotion_html + '</td><td>' + current_state + '</td></tr>'
 					$('#emotion_table').append(html)
 
 				}

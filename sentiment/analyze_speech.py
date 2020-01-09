@@ -23,6 +23,8 @@ from . import Vokaturi
 import os
 from operator import itemgetter
 
+FILE_NAME = "SENTIMENT.wav"
+
 if sys.platform == "linux":
     platform = "linux"
     lib = "OpenVokaturi-3-3-linux64.so"
@@ -38,7 +40,6 @@ lib_location = os.path.join(dir_path, 'lib', 'open', platform, lib)
 Vokaturi.load(lib_location)
 
 def analyze_sentiment():
-	FILE_NAME = "SENTIMENT.wav"
 	(sample_rate, samples) = scipy.io.wavfile.read(FILE_NAME)
 	buffer_length = len(samples)
 	c_buffer = Vokaturi.SampleArrayC(buffer_length)
@@ -72,9 +73,8 @@ def analyze_sentiment():
 
 	voice.destroy()
 
-	print("EmotionProbabilities SPEECH-TO-SENTIMENT")
-	print(emotion_probabilities_list)
-	return emotion_probabilities_list
+	emotions = sorted(emotion_probabilities_list, key=lambda x: x[1], reverse=True)   
+	return emotions
 
 if __name__ == "__main__":
 	analyze_sentiment()

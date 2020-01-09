@@ -56,7 +56,5 @@ def analyze_sentiment(transcript):
     analyzed_sentiment_results = sentiment_analysis(transcript)
     emotion_weights = handle_sentiment(analyzed_sentiment_results)
     emotions = find_emotions(emotion_weights)
-    print('EmotionProbabilities TEXT-TO-SENTIMENT')
-    print(emotions)
     return emotions
 
