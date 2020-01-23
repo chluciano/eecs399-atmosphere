@@ -7,7 +7,7 @@ import json
 
 speech_to_text_authenticator = IAMAuthenticator('Ie8T4DP8IqRzCSz3Ww8B1padPbY5sbrx_BvQu_IeeMFo')
 
-FILE_NAME = "SENTIMENT.wav"
+FILE_NAME = "EXAMPLE.wav"
 
 def transcribe():
     print("Transcribing...")

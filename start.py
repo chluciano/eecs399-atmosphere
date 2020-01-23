@@ -9,6 +9,7 @@ from transcription.recording import record_audio
 from transcription.speech_to_text import transcribe
 from sentiment.analyze_text import analyze_sentiment as analyze_text
 from sentiment.analyze_speech import analyze_sentiment as analyze_speech
+import music.spotify as spotify
 from operator import itemgetter
 
 app = Flask(__name__)
@@ -17,12 +18,6 @@ client_id = "7e12cab8110d45088dd8136f0fcdf54f"
 client_secret = "13962e5653a940c0ae513501b142538e"
 redirect_uri = "http://localhost:5000/player"
 app_token = "BQAxHESEFLJLnT_R2dM-IbDRwHZokPOiAVCpx-07QEGfybc7MeU7RZ5AmEj5a1iTve-0TpFG3TANWF_sfwD2Hv7yF1HxDo0TD00wiTy181knOaV5aBdJpcLxaARKA8OVk9SaRryxwFuhTvT3131OD2xh-jgAw-wDH86G5cGGGXVTczE"
-sadPlaylistUri = "spotify:user:spotifyluciano3:playlist:4fMQbprrxmFjLSHSOEj6sw"
-happyPlaylistUri = "spotify:user:spotifyluciano3:playlist:2i7PJTO3ypWshEfkhY2ja3"
-angryPlaylistUri = "spotify:user:spotifyluciano3:playlist:5CnhvCg1AcjuKH97lf1uam"
-sadPlaylistId = "4fMQbprrxmFjLSHSOEj6sw"
-happyPlaylistId = "2i7PJTO3ypWshEfkhY2ja3"
-angryPlaylistId = "5CnhvCg1AcjuKH97lf1uam"
 scope = "user-read-private user-read-email user-read-playback-state user-modify-playback-state streaming user-read-birthdate" 
 
 
@@ -52,10 +47,8 @@ def audio():
 		access_token = fetch_tokens_with_refresh(refresh_token);
 		if (user_state != current_state):
 			current_state = user_state
-			playlist = fetch_playlist_tracks("Bearer " + access_token, scope, user_state)
-			uris = []
-			for x in playlist["items"]: uris.append(x["track"]["uri"])
-			play_player("Bearer " + access_token, scope, uris)
+			uris = spotify.generate_playlist("Bearer " + access_token, scope, user_state)
+			spotify.play_player("Bearer " + access_token, scope, uris)
 		return jsonify({
 			'access_token': access_token, 
 			'refresh_token': refresh_token, 
@@ -92,44 +85,6 @@ def fetch_tokens_with_refresh(refresh_token):
 	r = response.json()
 	return r['access_token']
 
-def fetch_playlist_tracks(token, scope, user_state=None):
-	if user_state == "joy" or user_state == "happy":
-		playlistID = happyPlaylistId
-	elif user_state == "sadness" or user_state == "sad":
-		playlistID = sadPlaylistId
-	elif user_state == "anger" or user_state == "angry":
-		playlistID = angryPlaylistId
-	elif user_state == "fear":
-		playlistID = sadPlaylistId
-	else:
-		playlistID = happyPlaylistId
-	endpoint = "https://api.spotify.com/v1/playlists/" + playlistID + "/tracks"
-	response = requests.get(
-		endpoint,
-		headers = {
-			'Authorization' : token,
-			'scope' : scope
-		}
-	)
-	r = response.json()
-	return r
-
-def play_player(token, scope, uris):
-	endpoint = "https://api.spotify.com/v1/me/player/play"
-	payload = {
-		"uris": uris,
-		"position_ms": 35
-	}
-	response = requests.put(
-		endpoint,
-		headers = {
-			'Authorization' : token,
-			'scope' : scope
-		},
-		data = json.dumps(payload)
-	)
-	shuffle_player(token)
-
 @app.route("/pause", methods=['POST'])
 def pause_player(token, scope, uris):
 	endpoint = "https://api.spotify.com/v1/me/player/pause"
@@ -138,20 +93,6 @@ def pause_player(token, scope, uris):
 		headers = {
 			'Authorization' : token,
 			'scope' : scope
-		}
-	)
-
-
-
-def shuffle_player(token):
-	endpoint = "https://api.spotify.com/v1/me/player/shuffle"
-	response = requests.put(
-		endpoint,
-		headers = {
-			'Authorization' : token,
-		},
-		params = {
-			'state': True
 		}
 	)
 
