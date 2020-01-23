@@ -23,7 +23,7 @@ def record_audio():
     WAVE_OUTPUT_FILENAME = "SENTIMENT.wav"
     FORMAT = pyaudio.paInt16
     CHANNELS = 2
-    RECORD_SECONDS = 15
+    RECORD_SECONDS = 2
     CHUNK = 1024
     SAMPLE_RATE = 44100
     BITS_PER_SAMPLE = 16

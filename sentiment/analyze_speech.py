@@ -23,7 +23,7 @@ from . import Vokaturi
 import os
 from operator import itemgetter
 
-FILE_NAME = "SENTIMENT.wav"
+FILE_NAME = "EXAMPLE.wav"
 
 if sys.platform == "linux":
     platform = "linux"
