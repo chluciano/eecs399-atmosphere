@@ -16,7 +16,7 @@ def generate_max_tunable_attributes(user_state):
 	# TODO logic for generating the maximum for tunable attributes based on user_state
 	pass
 
-def generate_seed_genres(user_state):
+def generate_seed_genres(user_state=None):
 	# TODO logic for generating genres based on user_state
 	happy_genres = "acoustic, dance, edm, pop"
 	sad_genres = "chill, ambient, piano, soundtracks"
@@ -89,6 +89,14 @@ def play_player(token, scope, uris):
 
 def pause_player(token, scope, uris):
 	endpoint = 'https://api.spotify.com/v1/me/player/pause'
+	headers = generate_headers(token, scope)
+	requests.put(
+		endpoint,
+		headers = headers
+	)
+
+def shuffle_player(token, scope):	
+	endpoint = "https://api.spotify.com/v1/me/player/shuffle"	
 	headers = generate_headers(token, scope)
 	requests.put(
 		endpoint,

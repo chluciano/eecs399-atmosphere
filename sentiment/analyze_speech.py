@@ -1,22 +1,5 @@
 #!/usr/bin/env python3
 
-# OpenVokaWavMean-mac64.py
-# public-domain sample code by Vokaturi, 2019-05-30
-#
-# A sample script that uses the VokaturiPlus library to extract the emotions from
-# a wav file on disk. The file has to contain a mono or stereo recording.
-#
-# Call syntax:
-#   python3 OpenVokaWavMean-mac64.py path_to_sound_file.wav
-#
-# For the sound file hello.wav that comes with OpenVokaturi, the result should be:
-#	Neutral: 0.760
-#	Happy: 0.000
-#	Sad: 0.238
-#	Angry: 0.001
-#	Fear: 0.000
-
-
 import sys
 import scipy.io.wavfile
 from . import Vokaturi
@@ -63,11 +46,6 @@ def analyze_sentiment():
 			('angry', emotionProbabilities.anger),
 			('fear', emotionProbabilities.fear)
 		]
-		# print("Neutral: %.3f" % emotionProbabilities.neutrality)
-		# print("Happy: %.3f" % emotionProbabilities.happiness)
-		# print("Sad: %.3f" % emotionProbabilities.sadness)
-		# print("Angry: %.3f" % emotionProbabilities.anger)
-		# print("Fear: %.3f" % emotionProbabilities.fear)
 	else:
 		print("Not enough sonorancy to determine emotions")
 
