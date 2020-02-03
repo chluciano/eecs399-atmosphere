@@ -55,9 +55,9 @@ start.py
 Imports all the modules, contains a Flask server that authenticates to Spotify. Renders /transcription/index.html.
 This file should just be Flask (probably), so we should move any other functions to their respective modules. Also need to move the client ids and secrets into a config file.
 **To Do**
-- [] Move transcribe_and_analyze() to module.
-- [] Move compare_sentiment_analyses() to module
-- [] Store client ids, API keys, etc. to config file and import into script
+- Move transcribe_and_analyze() to module.
+- Move compare_sentiment_analyses() to module
+- Store client ids, API keys, etc. to config file and import into script
 
 ### Transcription Module
 ```
@@ -71,7 +71,7 @@ transcription.speech_to_text.py
 Sends recorded audio (SENTIMENT.wav) to Watson's Speech-to-Text API. Results from the API are in chunks, so there's a function to concatenate the final transcription.
 
 **To Do**
-- [] Find a way to transcribe faster (explore WebSocket vs. synchronous HTTP vs. async HTTP)
+- Find a way to transcribe faster (explore WebSocket vs. synchronous HTTP vs. async HTTP)
 
 ### Sentiment Module
 ```
@@ -85,8 +85,8 @@ sentiment.analyze_text.py
 Sends transcript to Natural Language Understanding API. Ngl, don't remember what some of the functions do so if anyone wants to figure it out that'd be cool! This is the spot where we can do keyword/entity/concept extraction. Check out the docs for more info or [the demo](https://natural-language-understanding-demo.ng.bluemix.net/)
 
 **To Do**
-- [] Figure out what handle_sentiment() and find_emotions() does
-- [] Explore entity + keyword extraction with API options
+- Figure out what handle_sentiment() and find_emotions() does
+- Explore entity + keyword extraction with API options
 
 ### Music Module
 ```
@@ -95,10 +95,10 @@ music.spotify.py
 Contains all the API endpoints to control playing music. Also has a function to automatically generate tracklists based on seed genres and attributes.
 
 **To Do**
-- [] Research music theory related to the different tunable attributes + genres offered by Spotify
-- [] Implement logic for generating genres based on the emotion from sentiment analysis
-- [] Implement logic for generating min_tunable attributes based on sentiment analysis results
-- [] Implement logic for generating max_tunable attributes based on sentiment analysis results
+- Research music theory related to the different tunable attributes + genres offered by Spotify
+- Implement logic for generating genres based on the emotion from sentiment analysis
+- Implement logic for generating min_tunable attributes based on sentiment analysis results
+- Implement logic for generating max_tunable attributes based on sentiment analysis results
 
 ### api Folder
 Vokaturi stuff, don't touch this
