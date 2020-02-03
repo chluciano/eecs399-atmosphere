@@ -25,11 +25,10 @@ def transcribe():
 
 def concatenate_transcription(api_result):
     final_transcript = ''
-    print(api_result)
+    print(json.dumps(api_result, indent=2, sort_keys=True))
     results = api_result['results']
     for result in results:
         final_transcript += result['alternatives'][0]['transcript']
-
     return final_transcript
 
 if __name__ == "__main__":

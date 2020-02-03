@@ -1,4 +1,4 @@
-from ibm_watson import SpeechToTextV1, NaturalLanguageUnderstandingV1
+from ibm_watson import NaturalLanguageUnderstandingV1
 from ibm_watson.natural_language_understanding_v1 import Features, EntitiesOptions, KeywordsOptions
 from ibm_watson.websocket import RecognizeCallback, AudioSource
 from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
