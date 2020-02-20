@@ -121,3 +121,9 @@ We'll probably need tests/refactoring at some point so we can run all the module
 - https://cloud.ibm.com/docs/services/natural-language-understanding
 - https://cloud.ibm.com/apidocs/natural-language-understanding/natural-language-understanding
 - https://developer.spotify.com/documentation/web-api/reference/browse/get-recommendations/
+
+Can't be silly
+Glengarry Glen Ross 
+Barry - Bill Hader
+Differences between tonality, look for examples that juxtapose things
+Richard Gear Officer 

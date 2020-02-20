@@ -40,7 +40,7 @@
 	const endpoint = 'http://localhost:5000/audio';
 	var access_token = '{{ access_token }}';
 	var refresh_token = '{{ refresh_token }}';
-	var current_State = '';
+	var current_state = '';
 
 	function displayJson(json){
 		html = ''
@@ -64,7 +64,7 @@
 			endpoint,
 			{
 				'refresh_token': refresh_token,
-				'current_state': current_State
+				'current_state': current_state
 
 			},
 			function(data){
@@ -84,12 +84,11 @@
 					$('#emotion_table').append(html)
 
 				}
-				
-
 			}
 		).fail(function(){
 			console.log('error')
 		});
+		
 	}
 
 	analyzeAtmosphere();

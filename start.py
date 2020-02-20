@@ -46,6 +46,7 @@ def audio():
 		refresh_token = request.values.get('refresh_token')
 		access_token = fetch_tokens_with_refresh(refresh_token);
 		if (user_state != current_state):
+			print(f"Current State: {current_state}     User State: {user_state}")
 			current_state = user_state
 			uris = spotify.generate_playlist("Bearer " + access_token, scope, user_state)
 			spotify.play_player("Bearer " + access_token, scope, uris)
