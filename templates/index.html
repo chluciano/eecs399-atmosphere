@@ -8,6 +8,32 @@
 </head>
 <body>
 	<meta id="spotify_uri" data-name="{{spotify_uri}}" data-other="{{spotify_uri}}">
+	<input type="file" accept="audio/*" capture id="recorder">
+	<audio id="player" controls></audio>
+	<script>
+	  const recorder = document.getElementById('recorder');
+	  const player = document.getElementById('player');
+
+	  recorder.addEventListener('change', function(e) {
+		const file = e.target.files[0];
+		const url = URL.createObjectURL(file);
+		// Do something with the audio file.
+		player.src = url;
+		var formData = new FormData();
+		formData.append("wav_file", file);
+		jQuery.ajax({
+        type: 'POST',
+        url:"http://localhost:5000/upload_audio",
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function(returnval) {
+             console.log(returnval);
+         }
+    });
+	  });
+	</script>
+
 	<div class="container-fluid" id="playerContainer">
 		<table class="table table-striped" id="emotion_table">
 			<thead>
