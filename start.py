@@ -59,6 +59,18 @@ def audio():
 			'transcription': transcription
 			})
 
+@app.route("/upload_audio", methods=['POST'])
+def upload_audio():
+	print('we made it here')
+	if request.method == 'POST':
+		wav_file = request.files['wav_file'].read()
+		filename = 'EXAMPLE.wav'
+		with open(filename, 'wb+') as dest:
+			dest.write(wav_file)
+		return jsonify({
+			'done': True
+			})
+
 def fetch_tokens_with_auth(auth_code):
 	payload = base64.b64encode(bytes(client_id + ":" + client_secret, 'utf-8')).decode("ascii")
 	response = requests.post(

@@ -131,42 +131,46 @@ def generate_playlist(token, scope, user_state=None):
 	min_attributes = generate_min_tunable_attributes(user_state)
 	max_attributes = generate_max_tunable_attributes(user_state)
 	seed_genres = generate_seed_genres(user_state)
+	if min_attributes and max_attributes:
+		params = {
+			('market', 'PH'),
+			('seed_genres', seed_genres),
+			('min_acousticness', min_attributes.min_acousticness),
+			('min_danceability', min_attributes.min_danceability),
+			('min_energy', min_attributes.min_energy),
+			('min_instrumentalness', min_attributes.min_instrumentalness),
+			('min_tempo', min_attributes.min_tempo),
+			('min_valence', min_attributes.min_valence),
+			('mode', min_attributes.mode),
+			('max_acousticness', max_attributes.max_acousticness),
+			('max_danceability', max_attributes.max_danceability),
+			('max_energy', max_attributes.max_energy),
+			('max_instrumentalness', max_attributes.max_instrumentalness),
+			('max_tempo', max_attributes.max_tempo),
+			('max_valence', max_attributes.max_valence),
+			('min_popularity', 0),
+			('max_popularity', 100)
+		}
 
-	params = {
-		('market', 'PH'),
-		('seed_genres', seed_genres),
-		('min_acousticness', min_attributes.min_acousticness),
-		('min_danceability', min_attributes.min_danceability),
-		('min_energy', min_attributes.min_energy),
-		('min_instrumentalness', min_attributes.min_instrumentalness),
-		('min_tempo', min_attributes.min_tempo),
-		('min_valence', min_attributes.min_valence),
-		('mode', min_attributes.mode),
-		('max_acousticness', max_attributes.max_acousticness),
-		('max_danceability', max_attributes.max_danceability),
-		('max_energy', max_attributes.max_energy),
-		('max_instrumentalness', max_attributes.max_instrumentalness),
-		('max_tempo', max_attributes.max_tempo),
-		('max_valence', max_attributes.max_valence),
-		('min_popularity', 0),
-		('max_popularity', 100)
-	}
-
-	endpoint = "https://api.spotify.com/v1/recommendations/"
-	headers = generate_headers(token, scope)
-	response = requests.get(
-		endpoint,
-		headers = headers,
-		params = params
-	).json()
-	# print(params)
-	# print("\n\n\n")
-	# print(json.dumps(response, indent=2, sort_keys=True))
-	tracks = response['tracks']
-	uris = []
-	for x in tracks: uris.append(x["uri"])
-	return uris
-
+		endpoint = "https://api.spotify.com/v1/recommendations/"
+		headers = generate_headers(token, scope)
+		response = requests.get(
+			endpoint,
+			headers = headers,
+			params = params
+		).json()
+		# print(params)
+		# print("\n\n\n")
+		# print(json.dumps(response, indent=2, sort_keys=True))
+		if 'tracks' in response:
+			tracks = response['tracks']
+		else:
+			tracks = []
+		uris = []
+		for x in tracks: uris.append(x["uri"])
+		return uris
+	else:
+		return []
 
 def play_player(token, scope, uris):
 	endpoint = "https://api.spotify.com/v1/me/player/play"

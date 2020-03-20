@@ -17,7 +17,7 @@ def transcribe():
     with open(FILE_NAME,'rb') as audio_file:
         api_result = service.recognize(
                 audio=audio_file,
-                content_type='audio/wav').get_result()
+                content_type='audio/wav', model='en-US_NarrowbandModel').get_result()
 
     print("Finished transcribing...")
     transcript = concatenate_transcription(api_result)

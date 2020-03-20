@@ -47,6 +47,7 @@ def analyze_sentiment():
 			('fear', emotionProbabilities.fear)
 		]
 	else:
+		emotion_probabilities_list = [('not_determinable', 1)]
 		print("Not enough sonorancy to determine emotions")
 
 	voice.destroy()
