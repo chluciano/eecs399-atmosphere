@@ -3,7 +3,7 @@
 
 ~~~
 source env/bin/activate
-pip3 install ibm_watson ibm_cloud_sdk_core Flask pyaudio wave scipy
+pip3 install ibm_watson ibm_cloud_sdk_core Flask pyaudio wave scipy xmltodict
 python3 start.py
 ~~~
 Anytime you want to run the program:
